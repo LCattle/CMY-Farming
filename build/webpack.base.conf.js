@@ -2,6 +2,7 @@ var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -38,10 +39,14 @@ module.exports = {
         include: [resolve('src'), resolve('test')]
       },
       {
+        test: /\.sass$/,
+        loader: ExtractTextPlugin.extract('style-loader!css-loader!sass-loader')
+      },
+      {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {
-          limit: 10000,
+          limit: 800,
           name: utils.assetsPath('img/[name].[hash:7].[ext]')
         }
       },

@@ -37,9 +37,9 @@
                         <i class="el-icon-menu"></i>导航一
                     </el-menu-item>
                     <el-menu-item index="2">
-                        <i class="el-icon-menu"></i>导航二
+                        <i class="el-icon-menu" ></i>导航二
                     </el-menu-item>
-                    <el-menu-item index="3">
+                    <el-menu-item index="3" @click="getNavData">
                         <i class="el-icon-setting"></i>导航三
                     </el-menu-item>
                     <el-menu-item index="4">
@@ -58,20 +58,42 @@
 </template>
 <script>
 import $ from 'jquery';
+import { mapGetters } from 'vuex'
+import store from './../store/index'
+function fetchHome(store) {
+    console.log('====================');
+    console.log(store);
+    return store.dispatch('GET_HOMEPAGE');
+}
+function fetchNav(store) {
+    return store.dispatch('FETCH_GET_NAV');
+}
 export default {
+    name: 'homepage',
+    store,
     data() {
         return {
-            activeIndex: '1'
+            activeIndex: '1',
+            datas: {},
+            index: 3,
+            navDatas: {}
         }
     },
-    methods: {
-        handleOpen() {
-
-        },
-        handleClose() {
-
-        }
-
+    
+    created() {
+    },
+    computed: mapGetters({
+        HomePage: 'homeData',
+        navData: 'navData'
+    }),
+    beforeMount() {
+        console.log('---------------------');
+        console.log(this.$store);
+        fetchHome(this.$store).then(() => {
+            console.log(this.$store);
+            this.datas = this.$store.getters.homeData.resultData;
+            console.log(this.datas.banner);
+        })
     },
     mounted() {
         var winH = $(window).height();
@@ -91,10 +113,30 @@ export default {
                 'height': h + 'px'
             });
         });
-    }
+
+    },
+    methods: {
+        handleOpen: function() {
+        },
+        handleClose: function() {
+
+        },
+        getNavData: function() {
+            fetchNav(this.$store).then(() => {
+                console.log('点击导航有数据吗？');
+                console.log(this.$store);
+                this.navDatas = this.$store.getters.getNavData;
+                console.log(this.navDatas);
+            })
+            /* console.log('点击导航有数据吗？');
+                console.log(this.$store);*/
+        }
+
+    },
+
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .header {
     width: 100%;
     height: 50px;
