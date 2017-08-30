@@ -10,10 +10,11 @@ import router from './router'
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios);
 Vue.use(ElementUI);
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  template: '<App/>',
-  components: { App }
-})
+console.log('路由：');
+  /* eslint-disable no-new */
+  new Vue({
+    el: '#app',
+    router,
+    template: '<App/>',
+    components: { App }
+  })

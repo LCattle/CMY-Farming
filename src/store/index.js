@@ -7,7 +7,8 @@ import HomePage from './modules/homepage'
 Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
-        navData: {}
+        navData: {},
+        subNavData: {}
     },
     actions,
     mutations,
