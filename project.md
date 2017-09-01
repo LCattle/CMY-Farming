@@ -24,7 +24,7 @@
 - 前端采取webpack编译构建开发，配合dev-server插件和node模拟后端服务器进行交互
 - 前端渐进式采取es6开发
 #
-- 把根目录下node_test2.rar copy到本目录外的任意目录
+- 把根目录下node_test2.rar copy到项目外的任意目录
 - 解压此文件
 - 进入到根目录
 - 命令行下执行： 'npm install'
