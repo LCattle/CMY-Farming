@@ -9,25 +9,22 @@
                     <span class="logo-txt" @click="toIndex">春沐源农业管理系统</span>
                 </div>
             </el-col>
-            <el-col :span="8">
-                <div class="nav-box">
-                    <el-menu theme="dark" class="nav-items" :default-active="activeIndex" mode="horizontal">
-                        <el-menu-item class="nav-item" index="1">Home</el-menu-item>
-                        <el-submenu class="nav-item" index="2">
-                            <template slot="title" class="sub-item-title">news</template>
-                            <el-menu-item index="2-1">new1</el-menu-item>
-                            <el-menu-item index="2-2">new2</el-menu-item>
-                            <el-menu-item index="2-3">new3</el-menu-item>
-                        </el-submenu>
-                        <el-menu-item class="nav-item" index="3">products</el-menu-item>
-                        <el-menu-item class="nav-item" index="4">activity</el-menu-item>
-                        <el-menu-item class="nav-item" index="5">about</el-menu-item>
-                    </el-menu>
-                </div>
+            <el-col :span="8" class="emptry-box">
             </el-col>
-            <el-col :span="8" class="nav-btn-box">
-                <el-button class="nav-btn" @click="sendLogin">sign in</el-button>
-                <el-button class="nav-btn">sign out</el-button>
+            <el-col :span="6" class="nav-btn-box">
+                <el-col :span="24">
+                    <el-dropdown>
+                        <span class="el-dropdown-link dropdown-btn-box">
+                            <i class="iconfont user-info-icon  el-icon--right">&#xe794;</i>
+                        </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item>设置</el-dropdown-item>
+                            <el-dropdown-item>消息</el-dropdown-item>
+                            <el-dropdown-item>个人信息</el-dropdown-item>
+                            <el-dropdown-item>注销</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </el-col>
             </el-col>
         </el-row>
     </header>
@@ -41,10 +38,10 @@ export default {
         }
     },
     methods: {
-        toIndex: function (){
+        toIndex: function() {
             this.$router.push('/')
         },
-        sendLogin: function () {
+        sendLogin: function() {
             this.$router.push('/login')
 
         }
@@ -52,7 +49,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.header-box{
+.header-box {
     position: fixed;
     top: 0;
     left: 0;
@@ -60,6 +57,7 @@ export default {
     height: 60px;
     z-index: 9;
 }
+
 .header {
     width: 100%;
     height: 60px;
@@ -71,7 +69,9 @@ export default {
     width: 100%;
     height: 60px;
 }
-
+.emptry-box{
+    height: 60px;
+}
 .logo-box .logo-txt,
 .logo-box .logo-icon {
     color: #fff;
@@ -98,6 +98,7 @@ export default {
 
 .nav-btn-box {
     text-align: right;
+    height: 60px;
 }
 
 .nav-btn-box .nav-btn {
@@ -108,6 +109,15 @@ export default {
 
 .nav-btn-box .nav-btn:last-child {
     margin-right: 170px;
+}
+.dropdown-btn-box{
+    height: 60px;
+    display: block;
+    line-height: 60px;
+    .user-info-icon{
+        font-size: 22px;
+        color: #fff;
+    }
 }
 </style>
 
