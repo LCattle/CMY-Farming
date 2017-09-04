@@ -26,7 +26,7 @@
                 </div>
             </el-col>
             <el-col :span="8" class="nav-btn-box">
-                <el-button class="nav-btn">sign in</el-button>
+                <el-button class="nav-btn" @click="sendLogin">sign in</el-button>
                 <el-button class="nav-btn">sign out</el-button>
             </el-col>
         </el-row>
@@ -43,6 +43,10 @@ export default {
     methods: {
         toIndex: function (){
             this.$router.push('/')
+        },
+        sendLogin: function () {
+            this.$router.push('/login')
+
         }
     }
 }

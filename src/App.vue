@@ -35,6 +35,14 @@ export default {
   padding: 0px;
   border: none;
 }
+a{
+  text-decoration: none;
+  font-size: 14px;
+  color: #b2b2b2;
+}
+a:hover{
+  color:#ccc;
+}
 
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -43,6 +51,20 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+@font-face {font-family: 'iconfont';
+    src: url('../static/fonts/iconfont.eot');
+    src: url('../static/fonts/iconfont.eot?#iefix') format('embedded-opentype'),
+    url('../static/fonts/iconfont.woff') format('woff'),
+    url('../static/fonts/iconfont.ttf') format('truetype'),
+    url('../static/fonts/iconfont.svg#iconfont') format('svg');
+}
+.iconfont{
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;}
 
 .left-nav-box {
   height: 100%;
