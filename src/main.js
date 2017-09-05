@@ -10,8 +10,7 @@ import App from './App'
 import router from './router'
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios);
-Vue.use(ElementUI);
-console.log('路由：');
+Vue.use(ElementUI)
   /* eslint-disable no-new */
   new Vue({
     el: '#app',
