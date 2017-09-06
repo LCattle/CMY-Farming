@@ -6,7 +6,7 @@ export function fetchHomePage () {
 }
 
 export function fetchGetNav () {
-    return Vue.axios.get('http://localhost:3000/page-data/product-detail-data')
+    return Vue.axios.get('/api/product-detail-data')
 }
 
 export function fetchGetSubNavById (idx) {
