@@ -1,7 +1,7 @@
 <template>
     <header class="header-box">
         <el-row class="header">
-            <el-col :span="8">
+            <el-col :span="3">
                 <div class="logo-box">
                     <span class="logo-icon">
                         <i class="el-icon-menu"></i>
@@ -9,12 +9,20 @@
                     <span class="logo-txt" @click="toIndex">春沐源农业管理系统</span>
                 </div>
             </el-col>
-            <el-col :span="8" class="emptry-box">
+            <el-col :span="13" class="emptry-box">
+                <el-input class="inp-box" placeholder="请输入关键字" icon="search" v-model="input2" :on-icon-click="handleIconClick">
+                </el-input>
             </el-col>
             <el-col :span="6" class="nav-btn-box">
                 <el-col :span="24">
+                    <span class="icon-box set-icon-box">
+                        <i class="iconfont set-icon">&#xe7da;</i>
+                    </span>
+                    <span class=" icon-box msg-icon-box">
+                        <i class="iconfont msg-icon">&#xe779;</i>
+                    </span>
                     <el-dropdown>
-                        <span class="el-dropdown-link dropdown-btn-box">
+                        <span class="el-dropdown-link dropdown-btn-box icon-box">
                             <i class="iconfont user-info-icon  el-icon--right">&#xe794;</i>
                         </span>
                         <el-dropdown-menu slot="dropdown">
@@ -34,7 +42,8 @@ export default {
     name: 'FHeader',
     data() {
         return {
-            activeIndex: '1'
+            activeIndex: '1',
+            input2: ''
         }
     },
     methods: {
@@ -43,6 +52,9 @@ export default {
         },
         sendLogin: function() {
             this.$router.push('/login')
+
+        },
+        handleIconClick: function () {
 
         }
     }
@@ -69,9 +81,17 @@ export default {
     width: 100%;
     height: 60px;
 }
-.emptry-box{
+
+.emptry-box {
     height: 60px;
+    text-align: left;
 }
+.inp-box{
+    width: 200px;
+    margin-top: 12px;
+    margin-left: 20px;
+}
+
 .logo-box .logo-txt,
 .logo-box .logo-icon {
     color: #fff;
@@ -84,7 +104,8 @@ export default {
     text-align: left;
 }
 
-.nav-items {
+
+/* .nav-items {
     height: 60px;
     background-color: #35404d;
 }
@@ -93,8 +114,7 @@ export default {
     height: 60px;
     line-height: 60px;
 }
-
-
+*/
 
 .nav-btn-box {
     text-align: right;
@@ -107,14 +127,30 @@ export default {
     color: #fff;
 }
 
+.nav-btn-box {
+    .icon-box {
+        width: 60px;
+        height: 60px;
+        line-height: 60px;
+        display: inline-block;
+        text-align: center;
+    }
+    .set-icon,
+    .msg-icon {
+        font-size: 22px;
+        color: #fff;
+    }
+}
+
 .nav-btn-box .nav-btn:last-child {
     margin-right: 170px;
 }
-.dropdown-btn-box{
+
+.dropdown-btn-box {
     height: 60px;
     display: block;
     line-height: 60px;
-    .user-info-icon{
+    .user-info-icon {
         font-size: 22px;
         color: #fff;
     }
