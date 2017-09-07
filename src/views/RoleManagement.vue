@@ -44,6 +44,7 @@
   </el-row>
 </template>
 <script>
+import bus from './../eventBus'
 import RMPup from './../components/RoleManagePup'
 export default {
   components: {
@@ -111,8 +112,9 @@ export default {
       console.log(`当前页: ${val}`);
     },
     shwoDialog: function () {
-      console.log('s');
-      this.dialogFormVisible = true;
+      //console.log('s');
+     // this.dialogFormVisible = true;
+     bus.$emit('is-show-rm-pup', '1');
     }
   }
 }

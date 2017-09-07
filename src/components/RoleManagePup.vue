@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="收货地址" :visible.sync="this.isShowPup">
+    <el-dialog title="收货地址" :visible.sync="this.isShowDialog">
       <el-form :model="form">
         <el-form-item label="活动名称" :label-width="formLabelWidth">
           <el-input v-model="form.name" auto-complete="off"></el-input>
@@ -18,6 +18,7 @@
 </el-dialog>
 </template>
 <script>
+import bus from './../eventBus'
 export default {
   props:{
     isShow : {
@@ -45,25 +46,22 @@ export default {
 
   },
   computed:{
-      isShowPup: function () {
-        return this.isShowDialog = this.isShow;
-      }
+      
   },
   methods: {
     hideDialog() {
-      // this.$emit('on-hide-dialog', false);
-      //this.isShowDialog = false;
-      //this.isShow = false;
-     this.isShowPup = function (){
-       return this.isShowDialog = false;
-     }
+     this.isShowDialog = false;
     },
     okDialog() {
       //this.$emit('on-ok-dialog', );
     } 
   },
   mounted() {
-    console.log('pup:' + this.isShowDialog);
+    bus.$on('is-show-rm-pup', (id) => {
+      console.log('接收到事件了？');
+      console.log(id);
+      this.isShowDialog = true;
+    })
   }
 }
 </script>
