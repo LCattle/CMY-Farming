@@ -12,7 +12,7 @@
     </el-form>
     <h1 class="form-title">角色列表</h1>
     <div class="btn-box">
-      <el-button type="text">
+      <el-button type="text" @click="shwoDialog">
         <i class="iconfont">&#xe763;</i>  
         <span>添加</span>
       </el-button>
@@ -40,20 +40,27 @@
     </el-table>
     <el-pagination class="pagination-box" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
     </el-pagination>
+  <RMPup :isShow="dialogFormVisible" @on-hide-dialog=""></RMPup>
   </el-row>
 </template>
 <script>
+import RMPup from './../components/RoleManagePup'
 export default {
+  components: {
+    RMPup
+  },
   data() {
     return {
       currentPage4: 4,
+      dialogFormVisible: false,
       formInline: {
         user: '',
         region: ''
       },
-      tableData3: [{
-        name: '系统管理员',
-        roleStatus: '王小虎',
+      tableData3: [
+      {
+        name: '系统管理员1',
+        roleStatus: '王小虎1',
         roleEx: '上海市普陀区金沙江路 1518 弄'
       }, {
         name: '系统管理员',
@@ -87,6 +94,9 @@ export default {
       multipleSelection: []
     }
   },
+  created() {
+      
+  },
   methods: {
     onSubmit() {
       console.log('submit!');
@@ -99,6 +109,10 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+    },
+    shwoDialog: function () {
+      console.log('s');
+      this.dialogFormVisible = true;
     }
   }
 }
