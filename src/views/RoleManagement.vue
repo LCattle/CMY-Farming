@@ -158,5 +158,10 @@ export default {
   text-align: right;
   margin-top: 20px;
 }
+.btn-box{
+  width:97%;
+  text-align: left;
+  margin-left: 20px;
+}
 </style>
 
