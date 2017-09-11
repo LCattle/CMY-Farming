@@ -1,0 +1,91 @@
+﻿1、系统角色列表
+ 路劲：sys/operatorDataGrid.do
+   参数说明：beginPage==>页码 pageSize==》每页显示多少条  _lk_rolename==》角色名称 
+   返回参数说明{
+    "basePageObj": {
+        "currentPage": 1,
+        "currentRow": 0,
+        "dataList": [
+            {
+                "ids": 3,//id
+				"menuIds": "",
+				"menuTexts": "",
+				"parentids": 0,//父节点
+				"roleareaids": "基本功能",//
+				"roledesc": "系统管理员",
+				"rolename": "系统管理员",//名称
+				"rolestatus": "1",
+				"type": "00"
+            },
+            {
+                "ids": 4,
+                "menuIds": "",
+                "menuTexts": "",
+                "parentids": 0,
+                "roleareaids": "",
+                "roledesc": "测试角色",
+                "rolename": "测试员",
+                "rolestatus": "1",
+                "type": "00"
+            }
+        ],
+        "hasNextPage": true,
+        "hasPreviousPage": false,
+        "totalPages": 2,
+        "totalRows": 15
+    },
+    "dataList": [],
+    "resultCode": "1",
+    "resultMsg": "查询成功",
+    "resultObj": {}
+}
+2、查看系统角色信息
+  路径：sys/rolemanagementLookRow.do
+  参数：ids==>主键
+ 返回参数说明{
+    "basePageObj": {
+        "currentPage": 0,
+        "currentRow": 0,
+        "dataList": [],
+        "hasNextPage": false,
+        "hasPreviousPage": false,
+        "totalPages": 0,
+        "totalRows": 0
+    },
+    "dataList": [],
+    "resultCode": "1",
+    "resultMsg": "",
+    "resultObj": {
+        "ids": 3,
+		//授权菜单id
+        "menuIds": "0,1,2,614,18,16,613,528,628,629,21,22,60,565,607,630,35,36,40,41,634,615,616,619,626,633,627,525,622,566,623,624,608,527,631,37,545,95,56,57,305,609,610,632,635,617,618,620,621,625,636,19,637,638,639,640,641,642,643,644,645,646,649,650,651,648,647,652,653,654",
+        "menuTexts": "",
+        "parentids": 0,
+        "roleareaids": "基本功能",
+        "roledesc": "系统管理员",
+        "rolename": "系统管理员",
+        "rolestatus": "1",
+        "type": "00"
+    }
+}
+3、系统角色更新
+路径：sys/rolemanagementUpdateRow.do
+ids:3 ==》主键ID
+rolename:系统管理员 ==》基色名称
+rolestatus:1  ==》角色状态
+roledesc:系统管理员 ==》描述
+menuIds:0  ==》菜单id
+menuIds:1  ==》菜单id
+menuIds:2  ==》菜单id
+4、系统角色添加
+路径：sys/rolemanagementInsertRow.do
+
+rolename:系统管理员 ==》基色名称
+rolestatus:1  ==》角色状态
+roledesc:系统管理员 ==》描述
+menuIds:0  ==》菜单id
+menuIds:1  ==》菜单id
+menuIds:2  ==》菜单id
+5、删除系统角色
+路经：sys/rolemanagementDeleteRow.do
+deleteIds==》系统角色id

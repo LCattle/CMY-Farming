@@ -35,6 +35,9 @@ export default {
   padding: 0px;
   border: none;
 }
+li{
+  list-style: none;
+}
 a{
   text-decoration: none;
   font-size: 14px;

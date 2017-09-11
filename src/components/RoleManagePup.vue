@@ -13,14 +13,28 @@
          <el-form-item label="角色描述" :label-width="formLabelWidth">
           <el-input type="textarea" v-model="form.desc"></el-input>
          </el-form-item>
-         <el-form-item label="菜单功能授权" :label-width="formLabelWidth">
-         <el-select v-model="value7" placeholder="请选择">
-            <el-option v-for="item in cities" :key="item.value" :label="item.label" :value="item.value">
-              <span style="float:left">{{ item.label }}</span>
-              <span style="float:right">{{ item.value }}</span>
-            </el-option>
-          </el-select>
-      </el-form-item>
+      <div class="el-form-item select-box ">
+        <label class="el-form-item__label" style="width: 100px;"> 菜单功能授权 </label>
+        <div class="el-form-item__content select-menu-box" style="margin-left: 100px">
+          <div class="el-input">
+            <input type="text" disabled  autocomplete="off"  placeholder="请选择功能" style="cursor:pointer;" rows="2" validateevent="true" class="el-input__inner">
+            <i class="iconfont arrow-icon">&#xe792;</i>
+          </div>
+          <div class="select-bar">
+            <el-checkbox v-model="checked">根目录</el-checkbox>
+            <ul class="options">
+                <li class="option-item">
+                    <el-checkbox v-model="checked">备选项</el-checkbox>
+                    <ul class="sub-options">
+                      <li class="sub-opt-item">
+                        <el-checkbox v-model="checked">备选项</el-checkbox>
+                      </li>
+                    </ul>
+                </li>
+            </ul>
+          </div>
+        </div>
+      </div>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="hideDialog">取 消</el-button>
@@ -41,6 +55,7 @@ export default {
     return {
        formLabelWidth: '100px',
        isShowDialog: false,
+       checked: false,
        form: {
           name: '',
           region: '',
@@ -102,5 +117,53 @@ export default {
 }
 </script>
 <style lang="scss">
-    
+.arrow-icon{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  width: 35px;
+  height: 100%;
+  text-align: center;
+  font-size: 22px;
+  color: #bfcbd9;
+  
+}
+.select-menu-box{
+  position: relative;
+}
+.select-bar{
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  text-align: left;
+  position: absolute;
+  top: 40px;
+  left: 0;
+  background: #fff;
+  z-index: 15;
+}
+.options{
+  padding-left: 18px;
+  .sub-opt-item{
+    padding-left: 18px;
+  }
+}
+.el-checkbox{
+  height: 25px;
+  line-height: 25px;
+  input, .el-checkbox__inner{
+    width: 15px;
+    height: 15px;
+  }
+  .el-checkbox__inner::after{
+    top: 0px;
+    left: 4px;
+  }
+}
+.icon-rotate-to-top{
+transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+}
 </style>
