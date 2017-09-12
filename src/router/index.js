@@ -6,6 +6,7 @@ import Login from '@/views/Login'
 import CreateUser from '@/views/createUser'
 import About from '@/views/about'
 import RoleManagement from '@/views/RoleManagement'
+import AddMenu from '@/views/addMenu'
 
 Vue.use(Router)
 
@@ -38,6 +39,13 @@ export default new Router({
           name: 'User',
           components: {
             rightContent: RoleManagement
+          }
+        },
+         {
+          path: '/addmenu',
+          name: 'User',
+          components: {
+            rightContent: AddMenu
           }
         }
       ]

@@ -1,14 +1,13 @@
 var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
+var webpack = require('webpack')
 var vueLoaderConfig = require('./vue-loader.conf')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
-console.log('=======================');
-console.log(utils.assetsPath);
 module.exports = {
   entry: {
     app: './src/main.js'
@@ -24,7 +23,8 @@ module.exports = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src')
+      '@': resolve('src'),
+      '_j': './src/assets/js/jq.js'
     }
   },
   module: {

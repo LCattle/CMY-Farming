@@ -83,4 +83,7 @@ a:hover{
   overflow: hidden;
   margin-top: 60px;
 }
+.hide{
+  display: none;
+}
 </style>

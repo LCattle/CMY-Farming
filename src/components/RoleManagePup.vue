@@ -20,15 +20,15 @@
             <input type="text" disabled autocomplete="off" placeholder="请选择功能" style="cursor:pointer;" rows="2" validateevent="true" class="el-input__inner">
             <i class="iconfont arrow-icon">&#xe792;</i>
           </div>
-          <div class="select-bar" v-for="(item, index) in this.navs" :key="index">
+          <div class="select-bar" v-for="(item, index) in this.navs" :key="item.id">
             <i class="iconfont hs-icon">&#xe622;</i>
-            <el-checkbox v-model="checkAll">{{ item.one_level }}</el-checkbox>
+            <el-checkbox class="all-checkbox" @change="changeAll" v-model="checkAll">{{ item.one_level }}</el-checkbox>
             <ul class="options">
-              <li class="option-item" v-for="(menu, index) in item.items" :key="index">
-                <i v-if="menu.isHasSub" class="iconfont hs-icon">&#xe622;</i>
-                <el-checkbox :checked="menu.isActive" :true-label="menu.id">{{ menu.name }}</el-checkbox>
-                <ul class="sub-options" v-if="menu.isHasSub">
-                  <li class="sub-opt-item" v-for="(sub, index) in menu.subItems" :key="index">
+              <li class="option-item" v-for="(menu, index) in item.items" :key="menu.id">
+                <i v-if="menu.isHasSub" class="iconfont hs-icon" @click="hsCheckboxIcon">&#xe622;</i>
+                <el-checkbox class="opt-items" @change="optsItemsChange($event)" :checked="menu.isActive" :true-label="menu.id">{{ menu.name }}</el-checkbox>
+                <ul class="sub-options hide" v-if="menu.isHasSub" >
+                  <li class="sub-opt-item" v-for="(sub, index) in menu.subItems" :key="sub.id">
                     <el-checkbox :true-label="sub.id" :checked="sub.isActive">{{ sub.name }}</el-checkbox>
                   </li>
                 </ul>
@@ -46,6 +46,7 @@
 </template>
 <script>
 import bus from './../eventBus'
+import _j from 'jquery'
 export default {
   props: {
     isShow: {
@@ -117,8 +118,18 @@ export default {
               isActive: false,
               id: 13
             }]
-          }
-        ]
+          },
+          {
+            name: '导航二T',
+            isActive: false,
+            id: 2,
+            isHasSub: false,
+            subItems: [{
+              name: '子导航CC',
+              isActive: false,
+              id: 13
+            }]
+          }]
       }]
     }
   },
@@ -139,14 +150,122 @@ export default {
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
-    }
+    },
+    // check all checkbox
+    changeAll(e) {
+      let _t = this;
+      let allCheckBoxDom = _j('.all-checkbox').children('.el-checkbox__input');
+      if (allCheckBoxDom.hasClass('is-checked')){
+      // check all
+       _t._changeAll(true);
+        
+      } else {
+      // unCheck all
+      _t._changeAll(false)
+      }
+    },
+    // check all checkbox ==> unCheck all 
+    _changeAll(isCheckAll) {
+      let checkBoxs = _j('.options').find('.el-checkbox');
+      if (isCheckAll) {
+        if (checkBoxs.length > 0) {
+          let tempItem = '', tempItemChil = '';
+          for (let i = 0, len = checkBoxs.length; i < len; i++) {
+              tempItem = _j(checkBoxs[i]);
+            tempItemChil = tempItem.children('.el-checkbox__input');
+              if (!tempItemChil.hasClass('is-checked')) {
+                tempItem.click();
+              }
+          }
+         var subItems = _j('.sub-options').find('.el-checkbox');
+          let subItemTemp = '';
+          for (var j = 0, len = subItems.length; j < len; j++) {
+            subItemTemp = _j(subItems[j]);
+            let subInputDom = subItemTemp.children('.el-checkbox__input');
+            if (!subInputDom.hasClass('is-checked')) {
+              subInputDom.click();
+            }
+          }
+        }
+      } else {
+          if (checkBoxs.length > 0) {
+          let tempItem = '', tempItemChil = '';
+          var subItems = _j('.sub-options').find('.el-checkbox');
+          for (let i = 0, len = checkBoxs.length; i < len; i++) {
+              tempItem = _j(checkBoxs[i]);
+            tempItemChil = tempItem.children('.el-checkbox__input');
+            
+              if (tempItemChil.hasClass('is-checked')) {
+                tempItem.click();
+              }
+          }
+          let subItemTemp = '';
+          for (var j = 0, len = subItems.length; j < len; j++) {
+            subItemTemp = _j(subItems[j]);
+            let subInputDom = subItemTemp.children('.el-checkbox__input');
+            if (subInputDom.hasClass('is-checked')) {
+              subInputDom.click();
+            }
+          }
+        }
+      }
+    },
+    // hide or show sub menus
+    hsCheckboxIcon(e) {
+      let iconDom = _j(e.target);
+      if (iconDom.hasClass('show')) {
+        iconDom.html('&#xe622;')
+        iconDom.siblings('.sub-options').slideUp();
+        iconDom.removeClass('show');
+        return;
+      }
+      iconDom.addClass('show');
+      iconDom.html('&#xe620;')
+      iconDom.siblings('.sub-options').slideDown();
+    },
+    optsItemsChange (e) {
+      let dom = _j(e.target).parents('label') || _j(e.target)
+      let checkDom = dom.children('.el-checkbox__input');
+      let subDom = dom.siblings('.sub-options');
+      let subCheckboxs = subDom.find('.el-checkbox');
+      if (checkDom.hasClass('is-checked')) {
+        // 选中
+        if (subCheckboxs.length > 0) {
+          let tempItem1 = '';
+          for (let i = 0, len = subCheckboxs.length; i < len; i++) {
+            tempItem1 = _j(subCheckboxs[i]);
+           
+            if (!tempItem1.hasClass('is-checked')) {
+              tempItem1.click();
+            }
+
+          }
+        }
+       
+      } else {
+          // 取消选中
+             // let subCheckboxs = subDom.find('.el-checkbox');
+          if (subCheckboxs.length > 0) {
+              let tempItem2 = '';
+              for (let i = 0, len = subCheckboxs.length; i < len; i++) {
+                tempItem2 = _j(subCheckboxs[i]);
+                 var tempItemChil = tempItem2.children('.el-checkbox__input');
+                if (tempItemChil.hasClass('is-checked')) {
+                        tempItem2.click();
+                }
+
+              }
+            }
+        }
+      }
   },
   mounted() {
     bus.$on('is-show-rm-pup', (id) => {
       console.log('接收到事件了？');
       console.log(id);
       this.isShowDialog = true;
-    })
+    });
+   
   }
 }
 </script>
