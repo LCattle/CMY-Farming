@@ -4,5 +4,8 @@ export default {
     },
     getSubNavData (state) {
         return state.subNavData;
+    },
+    getEditMenu(state) {
+        return state.menuData.data;
     }
 }

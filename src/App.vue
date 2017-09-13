@@ -41,7 +41,7 @@ li{
 a{
   text-decoration: none;
   font-size: 14px;
-  color: #b2b2b2;
+  color: #48576a;
 }
 a:hover{
   color:#ccc;

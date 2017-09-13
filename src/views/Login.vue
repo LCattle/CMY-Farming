@@ -66,15 +66,15 @@ export default {
                 this._showMessage('密码不能为空！');
                 return;
             }
-            fetchLogin(this.$store, this.user).then(() => {
+            /* fetchLogin(this.$store, this.user).then(() => {
                this.lgd = this.$store.getters.LoginData.resultData;
                if (this.lgd.resultCode === '1') {
                     const token = this.lgd.resultObj.token;
                     localStorage.token = token;
-                    this.$router.push('/');
                }
 
-            });
+            }); */
+            this.$router.push('/');
         },
         _showMessage: function (msg) {
             this.$message({

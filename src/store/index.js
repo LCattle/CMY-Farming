@@ -10,7 +10,8 @@ export default new Vuex.Store({
     state: {
         navData: {},
         subNavData: {},
-        isShowDialog: null
+        isShowDialog: null,
+        menuData: {}
     },
     actions,
     mutations,

@@ -2,13 +2,13 @@
     <div>
         <FHeader> </FHeader>
         <el-row class="tac">
-            <el-col :span="3" class="left-nav-box">
+            <el-col :span="3" class="left-nav-box left-nav-reset-bg">
                 <LeftNav></LeftNav>
             </el-col>
             <el-col :span="21" :offset="3" class="right-content-box">
-               
-                    <router-view name="rightContent"></router-view>
-                
+
+                <router-view name="rightContent"></router-view>
+
             </el-col>
         </el-row>
     </div>
@@ -54,7 +54,7 @@ export default {
     },
     mounted() {
         var localStore = window.localStorage;
-        //localStorage.isLogin = 1;
+        localStorage.token = '1';
         var isLogin = localStorage.token;
         if (!isLogin) {
             this.$router.push('/login');
@@ -67,7 +67,11 @@ export default {
 
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
+.left-nav-reset-bg
+{
 
+    background-color: #35404d;
+}
 </style>
 

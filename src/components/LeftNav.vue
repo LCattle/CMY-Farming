@@ -1,43 +1,36 @@
 <template>
     <el-menu default-active="2" class="el-menu-vertical-demo left-nav-reset-bg left-nav-items" @open="handleOpen" @close="handleClose">
-        <el-menu-item index="1">
-            <i class="el-icon-menu"></i>导航一
-        </el-menu-item>
-        <el-menu-item index="2">
-            <i class="el-icon-menu"></i>导航二
-        </el-menu-item>
-        <el-submenu index="1" class="left-nav-reset-bg ">
-            <template slot="title" v-bind:style="styleH">
-                <i class="el-icon-message" ></i>导航三</template>
-            <el-menu-item-group>
-                <el-menu-item index="1-1">选项1</el-menu-item>
-                <el-menu-item index="1-2">选项2</el-menu-item>
-                <el-menu-item index="1-3">选项3</el-menu-item>
-                <el-menu-item index="1-4">选项4</el-menu-item>
-                <el-menu-item index="1-5">选项5</el-menu-item>
-                <el-menu-item index="1-6">选项6</el-menu-item>
-            </el-menu-item-group>
-        </el-submenu>
-        <el-menu-item index="3" @click="getNavData">
-            <i class="el-icon-setting"></i>导航四
-        </el-menu-item>
-        <el-menu-item index="4" v-on:click="getSubNavById">
-            <i class="el-icon-document"></i>导航五
-        </el-menu-item>
-        <el-menu-item index="5">
-            <i class="el-icon-star-on"></i>导航六
-        </el-menu-item>
-        <el-menu-item index="6" @click="toNavSix">
-            <i class="el-icon-upload2"></i>导航七
-        </el-menu-item>
+        <div class="menu-box" v-for="(item, index) in navDatas" :key="item.id">
+            <el-menu-item :index="item.id" v-if="item.subItems.length < 1 && !item.isHasSub">
+                <router-link :to="item.url">
+                    <i class="el-icon-menu"></i>{{item.name}}
+                </router-link>
+            </el-menu-item>
+            <div v-if="item.isHasSub">
+                <el-submenu :index="item.id" class="left-nav-reset-bg " :key="item.id">
+                    <template slot="title">
+                        <i class="el-icon-message"></i>{{ item.name }}
+                    </template>
+                    <div v-if="item.isHasSub&&item.subItems.length > 0">
+                        <el-menu-item-group v-for="(subItem, idx) in item.subItems" :key="subItem.id">
+                            <router-link :to="subItem.url">
+                                <el-menu-item :index="item.id + '-' + subItem.id">{{ subItem.name }}</el-menu-item>
+                            </router-link>
+                        </el-menu-item-group>
+                    </div>
+                </el-submenu>
+            </div>
+        </div>
     </el-menu>
 </template>
 <script>
 import $ from 'jquery';
 import { mapGetters } from 'vuex'
 import store from './../store/index'
-function fetchNav(store) {
-    return store.dispatch('FETCH_GET_NAV');
+function fetchNav(store, token) {
+    return store.dispatch('FETCH_GET_NAV', {
+        token: token
+    });
 }
 function fetchSubNavById(store, idx) {
     console.log('刚进来???---' + idx);
@@ -50,10 +43,7 @@ export default {
     store,
     data() {
         return {
-            styleH: {
-                height: '40px',
-                lineHeight: '40px'
-            }
+            navDatas: {}
         }
     },
     computed: mapGetters({
@@ -65,10 +55,22 @@ export default {
         var headerH = $('.header').height();
         var h = docH - headerH;
         $('.left-nav-items').css({
-            'height': h + 'px'
-
+            'max-height': h + 'px',
+            'overflow-y': 'auto'
         });
 
+    },
+    beforeMount() {
+        let token = localStorage.token;
+        fetchNav(this.$store, token).then(() => {
+            console.log('导航有数据吗？');
+            var tempData = this.$store.getters.getNavData.data.resultObj[0];
+            this.navDatas = tempData.subItems;
+            console.log(tempData);
+            /*  if (tempData.isHasSub) {
+                 this.navDatas = tempData.subItems;
+             } */
+        })
     },
     methods: {
         handleOpen: function() {
@@ -77,12 +79,12 @@ export default {
 
         },
         getNavData: function() {
-            fetchNav(this.$store).then(() => {
-                console.log('点击导航有数据吗？');
-                console.log(this.$store);
-                this.navDatas = this.$store.getters.getNavData;
-                console.log(this.navDatas);
-            })
+            /*  fetchNav(this.$store).then(() => {
+                 console.log('点击导航有数据吗？');
+                 console.log(this.$store);
+                 this.navDatas = this.$store.getters.getNavData;
+                 console.log(this.navDatas);
+             }) */
         },
         getSubNavById: function() {
             console.log('yes or no ?');
@@ -99,7 +101,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.left-nav-reset-bg, .left-nav-reset-bg .el-menu {
+.left-nav-reset-bg,
+.left-nav-reset-bg .el-menu {
 
     background-color: #35404d;
 }
@@ -117,8 +120,12 @@ export default {
     height: 50px;
     line-height: 50px;
 }
-.el-menu-item, .el-submenu__title, .el-submenu .el-submenu__title{
+
+.el-menu-item,
+.el-submenu__title,
+.el-submenu .el-submenu__title {
     height: 40px !important;
     line-height: 40px !important;
+    text-align: left;
 }
 </style>

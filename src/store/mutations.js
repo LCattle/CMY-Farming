@@ -10,5 +10,10 @@ export default {
         console.log('get sub nav=========================');
         console.log(subNavData);
         state.subNavData = subNavData;
+    },
+    GET_EDIT_MENU: (state, { menuData }) => {
+        console.log('get edit menu=======================');
+        console.log(menuData);
+        state.menuData = menuData;
     }
 }

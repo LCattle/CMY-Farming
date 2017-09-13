@@ -13,63 +13,19 @@
                 </el-button>
             </div>
             <div class="show-menu-box">
-                <div class="menu-box">
+                <div class="edit-menu-box">
                     <div class="menu-box-root" @click="rootBoxClick($event)">
                         <i class="iconfont font-icon root-icon">&#xe76b;</i>
-                        <span>根目录</span>
+                        <span>{{ this.rootDom.name }}</span>
                     </div>
                     <ul class="menu-items">
-                        <li class="menu-item">
-                            <i class="iconfont font-icon menu-item-icon" @click="subItemsClick($event)">&#xe76b;</i>
-                            <span class="sub-txt" @click="showEditBox">系统管理</span>
-                            <ul class="sub-menu-box">
-                                <li class="sub-menu-item" data-parent="" data-id="" @click="showEditBox">
+                        <li class="menu-item" v-for="(item, index) in menuDatas" :key="item.id">
+                            <i class="iconfont font-icon menu-item-icon" v-if="item.isHasSub" @click="subItemsClick($event)">&#xe76b;</i>
+                            <span class="sub-txt" @click="showEditBox" v-bind:data-parent="rootDom.id + '-' + rootDom.name" v-bind:data-id="item.id + '-' + item.name">{{ item.name }}</span>
+                            <ul class="sub-menu-box" v-if="item.isHasSub">
+                                <li class="sub-menu-item" v-for="(subItem, index) in item.subItems" :key="subItem.id" v-bind:data-parent="item.id + '-' + item.name" v-bind:data-id="subItem.id + '-' + subItem.name" @click="showEditBox">
                                     <i class="iconfont font-icon sub-menu-icon">&#xe781;</i>
-                                    <span class="sub-item-txt">功能菜单管理</span>
-                                </li>
-                                <li class="sub-menu-item" @click="showEditBox">
-                                    <i class="iconfont font-icon sub-menu-icon">&#xe781;</i>
-                                    <span class="sub-item-txt">系统用户管理</span>
-                                </li>
-                                <li class="sub-menu-item" @click="showEditBox">
-                                    <i class="iconfont font-icon sub-menu-icon">&#xe781;</i>
-                                    <span class="sub-item-txt">系统角色管理 </span>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="menu-item">
-                            <i class="iconfont font-icon menu-item-icon" @click="subItemsClick($event)">&#xe76b;</i>
-                            <span class="sub-txt" @click="showEditBox">系统管理</span>
-                            <ul class="sub-menu-box">
-                                <li class="sub-menu-item" data-parent="" data-id="" @click="showEditBox">
-                                    <i class="iconfont font-icon sub-menu-icon">&#xe781;</i>
-                                    <span class="sub-item-txt">功能菜单管理</span>
-                                </li>
-                                <li class="sub-menu-item" @click="showEditBox">
-                                    <i class="iconfont font-icon sub-menu-icon">&#xe781;</i>
-                                    <span class="sub-item-txt">系统用户管理</span>
-                                </li>
-                                <li class="sub-menu-item" @click="showEditBox">
-                                    <i class="iconfont font-icon sub-menu-icon">&#xe781;</i>
-                                    <span class="sub-item-txt">系统角色管理 </span>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="menu-item">
-                            <i class="iconfont font-icon menu-item-icon" @click="subItemsClick($event)">&#xe76b;</i>
-                            <span class="sub-txt" @click="showEditBox">系统管理</span>
-                            <ul class="sub-menu-box">
-                                <li class="sub-menu-item" data-parent="" data-id="" @click="showEditBox">
-                                    <i class="iconfont font-icon sub-menu-icon">&#xe781;</i>
-                                    <span class="sub-item-txt">功能菜单管理</span>
-                                </li>
-                                <li class="sub-menu-item" @click="showEditBox">
-                                    <i class="iconfont font-icon sub-menu-icon">&#xe781;</i>
-                                    <span class="sub-item-txt">系统用户管理</span>
-                                </li>
-                                <li class="sub-menu-item" @click="showEditBox">
-                                    <i class="iconfont font-icon sub-menu-icon">&#xe781;</i>
-                                    <span class="sub-item-txt">系统角色管理 </span>
+                                    <span class="sub-item-txt">{{ subItem.name }}</span>
                                 </li>
                             </ul>
                         </li>
@@ -113,7 +69,13 @@
 </template>
 <script>
 import _j from 'jquery';
+import { mapGetters } from 'vuex'
+import store from './../store/index'
+function fetchEditMenu(store) {
+    return store.dispatch('FETCH_EDIT_MENU');
+}
 export default {
+    store,
     data() {
         return {
             ruleForm: {
@@ -123,6 +85,8 @@ export default {
                 sore: '',
                 desc: ''
             },
+            menuDatas: {},
+            rootDom: {},
             isShowEdit: false,
             rules: {
                 name: [
@@ -137,6 +101,23 @@ export default {
             }
         }
     },
+    computed: mapGetters({
+        menuData: 'menuData'
+    }),
+    beforeMount() {
+        fetchEditMenu(this.$store).then(() => {
+            console.log(this.$store);
+            var tempData = {};
+             tempData = this.$store.getters.getEditMenu;
+             if (tempData.resultCode === '1') {
+                 this.rootDom = tempData.resultObj[0];
+                 console.log('rootDom:');
+                 console.log(this.rootDom);
+                 this.menuDatas = this.rootDom.subItems;
+             }
+
+        })
+    },
     methods: {
         hideEditBox() {
             this.isShowEdit = false;
@@ -146,26 +127,28 @@ export default {
         },
         rootBoxClick(e) {
             var targetDom = _j(e.currentTarget);
-            var menuBoxDom = _j('.menu-box');
+            var menuBoxDom = _j('.edit-menu-box');
             if (targetDom.hasClass('nc-hide')) {
                 targetDom.removeClass('nc-hide');
-                 targetDom.children('i').html('&#xe76b;');
-                menuBoxDom.animate({
+                targetDom.children('i').html('&#xe76b;');
+                 menuBoxDom.animate({
                     'height': '600px'
-                }, 300, function() {
-                  
-                });
+                }, 300, function () {
+                    menuBoxDom.css({
+                        height: 'auto'
+                    });
+                }); 
                 return;
             }
             targetDom.addClass('nc-hide');
             targetDom.children('i').html('&#xe762;');
-           menuBoxDom.animate({
+             menuBoxDom.animate({
                 'height': '30px'
             }, 300, function() {
-                menuBoxDom.css({
+                 menuBoxDom.css({
                     'overflow': 'hidden'
-                });
-            });
+                }); 
+            }); 
 
         },
         subItemsClick(e) {
@@ -194,7 +177,7 @@ export default {
     margin-top: 20px;
 }
 
-.menu-box {
+.edit-menu-box {
     height: auto;
 }
 
@@ -240,10 +223,14 @@ export default {
         color: #ccc;
     }
 }
-.hide-menu-box{
+.menu-active{
+    color: #20a0ff;
+}
+.hide-menu-box {
     height: 30px;
     overflow: hidden;
 }
+
 .form-box {
     margin-top: 36px;
 }

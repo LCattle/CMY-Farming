@@ -6,15 +6,15 @@ export function fetchHomePage () {
      //return Vue.axios.get('http://localhost:3000/page-data/index-all-data')
 }
 
-export function fetchGetNav () {
-    return Vue.axios.get('/api/product-detail-data')
+export function fetchGetNav (token) {
+    return Vue.axios.post('/api/test-post', qs.stringify({
+        'token': token
+    }))
 }
 
 export function fetchGetSubNavById (idx) {
     console.log('获取子导航！');
-    //return Vue.axios.get('http://localhost:3000/page-data/index-all-data?id=' + idx.id)
     return Vue.axios.post('/api/test-post', {'id': idx.id})
-   // return Fetch.FetchPost('/api/test-post', {'id': idx.id});
 }
 
 export function fetchLogin (opt) {
@@ -24,4 +24,8 @@ export function fetchLogin (opt) {
         'id': opt.id,
         'pwd': opt.pwd
     }));
+}
+
+export function fetchEditMenu() {
+    return Vue.axios.post('/api/get-menu-edit')
 }
