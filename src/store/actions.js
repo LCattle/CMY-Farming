@@ -1,4 +1,4 @@
-import { fetchGetNav, fetchGetSubNavById } from './../fetch/api'
+import { fetchGetNav, fetchGetSubNavById, fetchLogin  } from './../fetch/api'
 
 export default {
     FETCH_GET_NAV: ({ commit, state }) => {

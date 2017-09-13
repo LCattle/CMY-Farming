@@ -4,6 +4,7 @@ import actions from './actions'
 import mutations from './mutations'
 import getters from './getters'
 import HomePage from './modules/homepage'
+import Login from './modules/login'
 Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
@@ -15,6 +16,7 @@ export default new Vuex.Store({
     mutations,
     getters,
     modules: {
-       HomePage
+       HomePage,
+       Login
     }
 })

@@ -7,10 +7,9 @@
             <i class="el-icon-menu"></i>导航二
         </el-menu-item>
         <el-submenu index="1" class="left-nav-reset-bg ">
-            <template slot="title">
-                <i class="el-icon-message"></i>导航三</template>
+            <template slot="title" v-bind:style="styleH">
+                <i class="el-icon-message" ></i>导航三</template>
             <el-menu-item-group>
-                <template slot="title">分组一</template>
                 <el-menu-item index="1-1">选项1</el-menu-item>
                 <el-menu-item index="1-2">选项2</el-menu-item>
                 <el-menu-item index="1-3">选项3</el-menu-item>
@@ -45,14 +44,16 @@ function fetchSubNavById(store, idx) {
     return store.dispatch('FETCH_SUBNAV_BY_ID', {
         id: idx
     });
-    /*return store.dispatch('FETCH_SUBNAV_BY_ID', idx);*/
 }
 export default {
     name: 'LeftNav',
     store,
     data() {
         return {
-
+            styleH: {
+                height: '40px',
+                lineHeight: '40px'
+            }
         }
     },
     computed: mapGetters({
@@ -115,5 +116,9 @@ export default {
 .el-menu--horizontal .el-submenu .el-submenu__title {
     height: 50px;
     line-height: 50px;
+}
+.el-menu-item, .el-submenu__title, .el-submenu .el-submenu__title{
+    height: 40px !important;
+    line-height: 40px !important;
 }
 </style>

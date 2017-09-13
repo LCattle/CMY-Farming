@@ -14,22 +14,10 @@
       </el-form-item>
     </el-form>
     <h1 class="form-title">角色列表</h1>
-    <!-- <div class="btn-box">
-      <el-button type="text" @click="shwoDialog">
-        <i class="iconfont">&#xe763;</i>  
-        <span>添加</span>
-      </el-button>
-      <el-button type="text">
-        <i class="iconfont">&#xe76c;</i>
-        <span>删除</span>
-      </el-button>
-    </div> -->
     <el-table ref="multipleTable" class="table-box" :default-sort="{prop: 'date', order: 'descending'}" :data="tableData3" border max-height="550" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
-      <!-- <el-table-column type="selection" width="55" style="padding-right:0;">
-      </el-table-column> -->
       <el-table-column label="操作" width="80">
         <template scope="scope">
-          <el-button type="text" size="small">
+          <el-button type="text" size="small" @click="showEditDialog">
             <i class="iconfont">&#xe7c3;</i>
           </el-button>
         </template>
@@ -40,28 +28,32 @@
       </el-table-column>
       <el-table-column prop="gener" label="性别" sortable width="120">
       </el-table-column>
-      <el-table-column prop="telphone" label="电话" sortable width="140">
+      <el-table-column prop="telphone" label="电话" width="140">
       </el-table-column>
       <el-table-column prop="roleStatus" label="状态" sortable width="120">
       </el-table-column>
-      <el-table-column prop="roleName" label="角色" sortable width="160">
+      <el-table-column prop="roleName" label="角色"  width="160">
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip>
+      <el-table-column prop="createTime" label="创建时间" sortable show-overflow-tooltip>
       </el-table-column>
     </el-table>
     <el-pagination class="pagination-box" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
     </el-pagination>
+     <EditUserPup :isShowDialog="this.isShowDialog"></EditUserPup>
   </el-row>
 </template>
 <script>
 import bus from './../eventBus'
+import EditUserPup from './../components/EditUserPup'
 export default {
   components: {
+    EditUserPup
   },
   data() {
     return {
       currentPage4: 4,
       dialogFormVisible: false,
+      isShowDialog: false,
       formInline: {
         user: '',
         region: ''
@@ -199,6 +191,9 @@ export default {
       //console.log('s');
      // this.dialogFormVisible = true;
      bus.$emit('is-show-rm-pup', '1');
+    },
+     showEditDialog: () => {
+      bus.$emit('show-edit-dialog', '1');
     }
   }
 }

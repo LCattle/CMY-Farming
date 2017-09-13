@@ -30,6 +30,7 @@ module.exports = {
     // proxy api request
     proxyTable: {
       '/api': {
+       // target: 'http://10.1.2.151/ctower-mall-c/sys/login',
         target: 'http://localhost:3000/page-data/',
         changeOrigin: true,
         pathRewrite: {

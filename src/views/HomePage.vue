@@ -54,9 +54,9 @@ export default {
     },
     mounted() {
         var localStore = window.localStorage;
-        localStorage.isLogin = 1;
-        var isLogin = localStorage.isLogin;
-        if (isLogin !==  '1') {
+        //localStorage.isLogin = 1;
+        var isLogin = localStorage.token;
+        if (!isLogin) {
             this.$router.push('/login');
         }
 

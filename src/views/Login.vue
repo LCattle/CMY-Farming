@@ -11,7 +11,7 @@
                     <i class="iconfont style-icon">&#xe782;</i>
                 </el-col>
                 <el-col :span="21" :offset="1">
-                    <el-input class="inp-item user-inp" placeholder="请输入用户名"> </el-input>
+                    <el-input class="inp-item user-inp" v-model="user.name" placeholder="请输入用户名"> </el-input>
                 </el-col>
             </el-row>
             <el-row class="inp-box">
@@ -19,21 +19,69 @@
                     <i class="iconfont style-icon">&#xe7d7;</i>
                 </el-col>
                 <el-col :span="21" :offset="1">
-                    <el-input class="inp-item pass-inp" type="password" placeholder="请输入密码"  auto-complete="off"></el-input>
+                    <el-input class="inp-item pass-inp" type="password" v-model="user.pass" placeholder="请输入密码"  auto-complete="off"></el-input>
                 </el-col>
             </el-row>
             <el-row class="never-pass">
                 <router-link class="never-txt" :to="{}">忘记密码？</router-link>
             </el-row>
-             <el-button class="btn-display" type="success">登录</el-button>
+             <el-button class="btn-display" type="success" @click="_login($event)">登录</el-button>
         </div>
+        <!--<el-button :plain="true" v-show="isShowMassage"></el-button>-->
     </el-row>
 </template>
 <script>
+import { mapGetters } from 'vuex'
+import store from './../store/index'
+function fetchLogin(store, opt) {
+    return store.dispatch('LOGIN', {
+        id: opt.name,
+        pwd: opt.pass
+    });
+}
 export default {
+    store,
+    name: 'loginpage',
     data () {
         return {
+            user: {
+                name: '',
+                pass: ''
+            },
+            lgd: {}
+        }
+    },
+    computed: mapGetters({
+        loginData: 'LoginData'
+    }),
+    methods: {
+        _login: function (e) {
+            var name = this.user.name;
+            var pass = this.user.pass;
+            if (!name) {
+               this._showMessage('用户名不能为空！');
+                return;
+            }
+            if (!pass) {
+                this._showMessage('密码不能为空！');
+                return;
+            }
+            fetchLogin(this.$store, this.user).then(() => {
+               this.lgd = this.$store.getters.LoginData.resultData;
+               if (this.lgd.resultCode === '1') {
+                    const token = this.lgd.resultObj.token;
+                    localStorage.token = token;
+                    this.$router.push('/');
+               }
 
+            });
+        },
+        _showMessage: function (msg) {
+            this.$message({
+                type: 'error',
+                showClose: true,
+                message: msg
+            });
         }
     }
 }
