@@ -28,9 +28,7 @@ import $ from 'jquery';
 import { mapGetters } from 'vuex'
 import store from './../store/index'
 function fetchNav(store, token) {
-    return store.dispatch('FETCH_GET_NAV', {
-        token: token
-    });
+    return store.dispatch('FETCH_GET_NAV', token);
 }
 function fetchSubNavById(store, idx) {
     console.log('刚进来???---' + idx);
@@ -65,7 +63,7 @@ export default {
         fetchNav(this.$store, token).then(() => {
             console.log('导航有数据吗？');
             var tempData = this.$store.getters.getNavData.data.resultObj[0];
-            this.navDatas = tempData.subItems;
+           this.navDatas = tempData.subItems;
             console.log(tempData);
             /*  if (tempData.isHasSub) {
                  this.navDatas = tempData.subItems;
@@ -126,6 +124,6 @@ export default {
 .el-submenu .el-submenu__title {
     height: 40px !important;
     line-height: 40px !important;
-    text-align: left;
+    text-align: left !important;
 }
 </style>

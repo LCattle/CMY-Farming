@@ -7,9 +7,14 @@ export function fetchHomePage () {
 }
 
 export function fetchGetNav (token) {
-    return Vue.axios.post('/api/test-post', qs.stringify({
-        'token': token
+    console.log('有token吗？');
+    console.log(token);
+    return Vue.axios.post('http://10.1.2.151/ctower-mall-c//sys/login/loadMenus.do', qs.stringify({
+        'loginedtoken': token
     }))
+   /* return Vue.axios.post('/api/test-post', qs.stringify({
+        'token': token
+    }))*/
 }
 
 export function fetchGetSubNavById (idx) {
@@ -27,5 +32,47 @@ export function fetchLogin (opt) {
 }
 
 export function fetchEditMenu() {
-    return Vue.axios.post('/api/get-menu-edit')
+   // return Vue.axios.post('/api/get-menu-edit')
+   return Vue.axios.post('http://10.1.2.151/ctower-mall-c/sys/menumanagementMenus.do?parentId=-1')
+}
+
+export function fetchUpdateMenu(opts) {
+    console.log('更新菜单这个是什么？');
+    console.log(opts)
+    return Vue.axios.post('http://10.1.2.151/ctower-mall-c/sys/menumanagementUpdateNode.do', qs.stringify({
+        ids: opts.id,
+        menuname: opts.name,
+        parentids: opts.parentId,
+        menuaction: opts.path,
+        menusort: opts.sore,
+        menudesc: opts.desc,
+        menustart: 1,
+        loginedtoken: opts.token
+    }));
+}
+export function fetchAddMenu(opts) {
+    console.log('更新菜单这个是什么？');
+    console.log(opts)
+    return Vue.axios.post('http://10.1.2.151/ctower-mall-c/sys/menumanagementNewNode.do', qs.stringify({
+        menuname: opts.name,
+        parentids: opts.parentId,
+        menuaction: opts.path,
+        menusort: opts.sore,
+        menudesc: opts.desc,
+        menustart: 1,
+        loginedtoken: opts.token
+    }));
+}
+export function fetchDeleteMenu(opts) {
+    console.log('删除菜单这个是什么？');
+    console.log(opts)
+    return Vue.axios.post('http://10.1.2.151/ctower-mall-c/sys/menumanagementDeleteNode.do', qs.stringify({
+        ids: opts.id,
+        menuname: opts.name,
+        parentids: opts.parentId,
+        menuaction: opts.path,
+        menusort: opts.sore,
+        menudesc: opts.desc,
+        loginedtoken: opts.token
+    }));
 }

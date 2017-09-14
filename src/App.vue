@@ -73,7 +73,7 @@ a:hover{
   height: 100%;
   overflow: hidden;
   position: fixed;
-  top: 0;
+  top: 60px;
   left: 0;
 }
 

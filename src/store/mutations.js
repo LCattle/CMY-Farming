@@ -15,5 +15,20 @@ export default {
         console.log('get edit menu=======================');
         console.log(menuData);
         state.menuData = menuData;
+    },
+    UPDATE_MENU_NOW: (state, { upMenuDatas }) => {
+        console.log('更新菜单---------------------++');
+        console.log(upMenuDatas);
+        state.upMenuDatas = upMenuDatas;
+    },
+    ADD_MENU_NOW: (state, { addMenuDatas }) => {
+        console.log('添加菜单---------------------++');
+        console.log(addMenuDatas);
+        state.addMenuDatas = addMenuDatas;
+    },
+    DELETE_MENU_NOW: (state, { delMenuDatas }) => {
+        console.log('添加菜单---------------------++');
+        console.log(delMenuDatas);
+        state.delMenuDatas = delMenuDatas;
     }
 }

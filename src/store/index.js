@@ -11,7 +11,10 @@ export default new Vuex.Store({
         navData: {},
         subNavData: {},
         isShowDialog: null,
-        menuData: {}
+        menuData: {},
+        upMenuDatas: {},
+        addMenuDatas: {},
+        delMenuDatas: {}
     },
     actions,
     mutations,
