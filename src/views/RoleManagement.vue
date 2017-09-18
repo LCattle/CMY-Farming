@@ -21,7 +21,7 @@
         <span>删除</span>
       </el-button>
     </div>
-    <el-table ref="multipleTable" class="table-box" :default-sort="{prop: 'date', order: 'descending'}" :data="tableData3" border tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
+    <el-table ref="multipleTable" class="table-box" :default-sort="{prop: 'date', order: 'descending'}" :data="roles" border tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" style="padding-right:0;">
       </el-table-column>
       <el-table-column label="操作" width="120">
@@ -31,6 +31,8 @@
           </el-button>
         </template>
       </el-table-column>
+      <el-table-column label="ID" width="120" prop="id" sortable>
+      </el-table-column>
       <el-table-column label="角色名称" width="120" prop="name" sortable>
       </el-table-column>
       <el-table-column prop="roleStatus" label="角色状态" sortable width="120">
@@ -38,18 +40,24 @@
       <el-table-column prop="roleEx" label="角色描述" show-overflow-tooltip>
       </el-table-column>
     </el-table>
-    <el-pagination class="pagination-box" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+    <el-pagination class="pagination-box" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[10, 20, 30, 40, 50]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
     </el-pagination>
   <RMPup :isShow="dialogFormVisible" @on-hide-dialog=""></RMPup>
   </el-row>
 </template>
 <script>
 import bus from './../eventBus'
+import store from './../store/index'
+import { mapGetters } from 'vuex'
 import RMPup from './../components/RoleManagePup'
+function fetchAllRoles(store, opts) {
+  return store.dispatch('GET_ALL_ROLES', opts);
+}
 export default {
   components: {
     RMPup
   },
+  store,
   data() {
     return {
       currentPage4: 4,
@@ -58,38 +66,17 @@ export default {
         user: '',
         region: ''
       },
+      opts: {
+        token: localStorage.token,
+        beginPage: 1,
+        pageSize: 10,
+        roleName: ''
+      },
+      roles: [],
       tableData3: [
       {
         name: '系统管理员1',
         roleStatus: '王小虎1',
-        roleEx: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        name: '系统管理员',
-        roleStatus: '王小虎',
-        roleEx: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        name: '系统管理员',
-        roleStatus: '王小虎',
-        roleEx: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        name: '系统管理员',
-        roleStatus: '王小虎',
-        roleEx: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        name: '系统管理员',
-        roleStatus: '王小虎',
-        roleEx: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        name: '系统管理员',
-        roleStatus: '王小虎',
-        roleEx: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        name: '系统管理员',
-        roleStatus: '王小虎',
-        roleEx: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        name: '系统管理员',
-        roleStatus: '王小虎',
         roleEx: '上海市普陀区金沙江路 1518 弄'
       }],
       multipleSelection: []
@@ -97,6 +84,16 @@ export default {
   },
   created() {
       
+  },
+  computed: mapGetters({
+    roleDatas: 'roleDatas'
+  }),
+  beforeMount() {
+    fetchAllRoles(this.$store, this.opts).then(() => {
+      console.log('角色有数据吗？');
+      let tempData = this.$store.getters.getAllRoles;
+      this.decDatas(tempData, this.opts);
+    })
   },
   methods: {
     onSubmit() {
@@ -113,6 +110,21 @@ export default {
     },
     shwoDialog: function () {
      bus.$emit('is-show-rm-pup', '1');
+    },
+    decDatas(data, opts) {
+      let tempData = data;
+      if (tempData.resultCode === '1') {
+          let tempItem = {}, datas = tempData.basePageObj.dataList;
+          for (let i = 0, len = datas.length; i < len; i++){
+            tempItem = datas[i];
+            this.roles.push({
+              id:　tempItem.ids,
+              name: tempItem.rolename,
+              roleStatus: tempItem.rolestatus === '1' ?　'有效' : '无效',
+              roleEx: tempItem.roledesc
+            });
+          }
+      }
     }
    
   }

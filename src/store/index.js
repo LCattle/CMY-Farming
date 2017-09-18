@@ -5,6 +5,8 @@ import mutations from './mutations'
 import getters from './getters'
 import HomePage from './modules/homepage'
 import Login from './modules/login'
+import UserAdmin from './modules/useradmin'
+import RoleManagement from './modules/rolemanagement'
 Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
@@ -21,6 +23,8 @@ export default new Vuex.Store({
     getters,
     modules: {
        HomePage,
-       Login
+       Login,
+       UserAdmin,
+       RoleManagement
     }
 })
