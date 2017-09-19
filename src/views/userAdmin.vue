@@ -61,51 +61,6 @@ export default {
       dialogFormVisible: false,
       isShowDialog: false,
       isShowLoading: false,
-      dataLists: [{
-        userName: '系统管理员1',
-        roleStatus: '养牛中',
-        acc: 'cattlelin',
-        gener: '男',
-        telphone: '13537575578',
-        roleName: '放牛管理员，养羊管理员',
-        createTime: '2017-11-11 18:26:00'
-      },
-      {
-        userName: '系统管理员1',
-        roleStatus: '养牛中',
-        acc: 'cattlelin',
-        gener: '男',
-        telphone: '13537575578',
-        roleName: '放牛管理员，养羊管理员',
-        createTime: '2017-11-11 18:26:00'
-      },
-      {
-        userName: '系统管理员1',
-        roleStatus: '养牛中',
-        acc: 'cattlelin',
-        gener: '男',
-        telphone: '13537575578',
-        roleName: '放牛管理员，养羊管理员',
-        createTime: '2017-11-11 18:26:00'
-      },
-      {
-        userName: '系统管理员1',
-        roleStatus: '养牛中',
-        acc: 'cattlelin',
-        gener: '男',
-        telphone: '13537575578',
-        roleName: '放牛管理员，养羊管理员',
-        createTime: '2017-11-11 18:26:00'
-      },
-      {
-        userName: '系统管理员1',
-        roleStatus: '养牛中',
-        acc: 'cattlelin',
-        gener: '男',
-        telphone: '13537575578',
-        roleName: '放牛管理员，养羊管理员',
-        createTime: '2017-11-11 18:26:00'
-      }],
       opts: {
         token: localStorage.token,
         acc: '',

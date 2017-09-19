@@ -99,6 +99,19 @@ export function fetchAllRoles(opts) {
         loginedtoken: opts.token,
         beginPage: opts.beginPage,
         pageSize: opts.pageSize,
-        _lk_rolename: opts.username
+        _lk_rolename: opts.roleName
+    }));
+}
+export function fetchDelByIds(opts) {
+    return Vue.axios.post('http://10.1.2.151/ctower-mall-c/sys/rolemanagementDeleteRow.do', qs.stringify({
+        loginedtoken: opts.token,
+        deleteIds: opts.roleIds
+    }));
+}
+
+export function fetchAddRole(opts) {
+    return Vue.axios.post('', qs.stringify({
+        loginedtoken: opts.token,
+        deleteIds: opts.roleIds
     }));
 }

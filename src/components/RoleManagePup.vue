@@ -1,17 +1,17 @@
 <template>
-  <el-dialog title="角色信息" :visible.sync="this.isShowDialog" size="try">
-    <el-form :model="form">
+  <el-dialog title="角色信息" :visible.sync="this.isShowDialog" >
+    <el-form :model="role">
       <el-form-item label="角色名称" :label-width="formLabelWidth">
-        <el-input v-model="form.name" auto-complete="off"></el-input>
+        <el-input v-model="role.name" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item label="角色状态" :label-width="formLabelWidth">
-        <el-select v-model="form.region" placeholder="请选择活动区域">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
+        <el-select v-model="role.region" placeholder="请选择">
+          <el-option label="有效" value="1"></el-option>
+          <el-option label="无效" value="0"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="角色描述" :label-width="formLabelWidth">
-        <el-input type="textarea" v-model="form.desc"></el-input>
+        <el-input type="textarea" v-model="role.desc"></el-input>
       </el-form-item>
       <div class="el-form-item select-box ">
         <label class="el-form-item__label" style="width: 100px;"> 菜单功能授权 </label>
@@ -20,16 +20,34 @@
             <input type="text" disabled autocomplete="off" placeholder="请选择功能" style="cursor:pointer;" rows="2" validateevent="true" class="el-input__inner">
             <i class="iconfont arrow-icon">&#xe792;</i>
           </div>
-          <div class="select-bar" v-for="(item, index) in this.navs" :key="item.id">
+          <div class="select-bar" v-for="(item, index) in this.rolesData" :key="item.id">
             <i class="iconfont hs-icon">&#xe622;</i>
-            <el-checkbox class="all-checkbox" @change="changeAll" v-model="checkAll">{{ item.one_level }}</el-checkbox>
+            <label class="el-checkbox root-el-checkbox" v-bind:data-id="item.id" @click.prevent="changeAll($event)">
+              <span class="el-checkbox__input root-checkbox">
+                <span class="el-checkbox__inner"></span>
+                <input type="checkbox" class="el-checkbox__original" value="">
+              </span>
+              <span class="el-checkbox__label">{{ item.name }}</span>
+            </label>
             <ul class="options">
-              <li class="option-item" v-for="(menu, index) in item.items" :key="menu.id">
+              <li class="option-item" v-for="(menu, index) in item.subItems" :key="menu.id">
                 <i v-if="menu.isHasSub" class="iconfont hs-icon" @click="hsCheckboxIcon">&#xe622;</i>
-                <el-checkbox class="opt-items" @change="optsItemsChange($event)" :checked="menu.isActive" :true-label="menu.id">{{ menu.name }}</el-checkbox>
+                <label class="el-checkbox item-el-checkbox" v-bind:data-id="menu.id" @click.prevent="itemSelect($event)" >
+                  <span class="el-checkbox__input item-checkbox">
+                    <span class="el-checkbox__inner"></span>
+                    <input type="checkbox" class="el-checkbox__original" value="">
+                  </span>
+                  <span class="el-checkbox__label">{{ menu.name }}</span>
+                </label>
                 <ul class="sub-options hide" v-if="menu.isHasSub" >
                   <li class="sub-opt-item" v-for="(sub, index) in menu.subItems" :key="sub.id">
-                    <el-checkbox :true-label="sub.id" :checked="sub.isActive">{{ sub.name }}</el-checkbox>
+                    <label class="el-checkbox sub-el-checkbox" v-bind:data-id="sub.id" @click.prevent="subSelect($event)">
+                      <span class="el-checkbox__input span-checkbox" >
+                        <span class="el-checkbox__inner"></span>
+                        <input type="checkbox" class="el-checkbox__original" value="">
+                      </span>
+                      <span class="el-checkbox__label">{{ sub.name }}</span>
+                    </label>
                   </li>
                 </ul>
               </li>
@@ -46,7 +64,15 @@
 </template>
 <script>
 import bus from './../eventBus'
+import { mapGetters } from 'vuex'
 import _j from 'jquery'
+import store from './../store/index'
+function addRoles(store) {
+  return store.dispatch('ADD_ROLES');
+}
+function fetchRoles(store, token) {
+    return store.dispatch('FETCH_GET_NAV', token);
+}
 export default {
   props: {
     isShow: {
@@ -54,40 +80,19 @@ export default {
       default: false
     }
   },
+  store,
   data() {
     return {
       formLabelWidth: '100px',
       isShowDialog: false,
       checkAll: false,
-      form: {
+      token: localStorage.token,
+      role: {
         name: '',
         region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
         desc: ''
       },
-      cities: [{
-        value: 'Beijing',
-        label: '北京'
-      }, {
-        value: 'Shanghai',
-        label: '上海'
-      }, {
-        value: 'Nanjing',
-        label: '南京'
-      }, {
-        value: 'Chengdu',
-        label: '成都'
-      }, {
-        value: 'Shenzhen',
-        label: '深圳'
-      }, {
-        value: 'Guangzhou',
-        label: '广州'
-      }],
+      rolesData: {},
       value7: '',
       navs: [{
         one_level: '根目录',
@@ -136,9 +141,9 @@ export default {
   mutated() {
 
   },
-  computed: {
-
-  },
+  computed: mapGetters({
+    getRoleData: 'navData'
+  }),
   methods: {
     hideDialog() {
       this.isShowDialog = false;
@@ -153,62 +158,30 @@ export default {
     },
     // check all checkbox
     changeAll(e) {
-      let _t = this;
-      let allCheckBoxDom = _j('.all-checkbox').children('.el-checkbox__input');
-      if (allCheckBoxDom.hasClass('is-checked')){
-      // check all
-       _t._changeAll(true);
-        
-      } else {
-      // unCheck all
-      _t._changeAll(false)
-      }
-    },
-    // check all checkbox ==> unCheck all 
-    _changeAll(isCheckAll) {
-      let checkBoxs = _j('.options').find('.el-checkbox');
-      if (isCheckAll) {
-        if (checkBoxs.length > 0) {
-          let tempItem = '', tempItemChil = '';
-          for (let i = 0, len = checkBoxs.length; i < len; i++) {
-              tempItem = _j(checkBoxs[i]);
-            tempItemChil = tempItem.children('.el-checkbox__input');
-              if (!tempItemChil.hasClass('is-checked')) {
-                tempItem.click();
-              }
-          }
-         var subItems = _j('.sub-options').find('.el-checkbox');
-          let subItemTemp = '';
-          for (var j = 0, len = subItems.length; j < len; j++) {
-            subItemTemp = _j(subItems[j]);
-            let subInputDom = subItemTemp.children('.el-checkbox__input');
-            if (!subInputDom.hasClass('is-checked')) {
-              subInputDom.click();
-            }
-          }
-        }
-      } else {
-          if (checkBoxs.length > 0) {
-          let tempItem = '', tempItemChil = '';
-          var subItems = _j('.sub-options').find('.el-checkbox');
-          for (let i = 0, len = checkBoxs.length; i < len; i++) {
-              tempItem = _j(checkBoxs[i]);
-            tempItemChil = tempItem.children('.el-checkbox__input');
-            
-              if (tempItemChil.hasClass('is-checked')) {
-                tempItem.click();
-              }
-          }
-          let subItemTemp = '';
-          for (var j = 0, len = subItems.length; j < len; j++) {
-            subItemTemp = _j(subItems[j]);
-            let subInputDom = subItemTemp.children('.el-checkbox__input');
-            if (subInputDom.hasClass('is-checked')) {
-              subInputDom.click();
-            }
-          }
+      let dom = _j(e.currentTarget);
+      let rootCheckBoxDom = dom.find('.root-checkbox');
+      let itemCheckBoxDom = _j('.options').find('.item-el-checkbox')
+        let tempItem = '';
+      if (dom.hasClass('checked')) {
+        dom.removeClass('checked')
+        rootCheckBoxDom.removeClass('is-checked');
+      for (let i = 0, len = itemCheckBoxDom.length; i < len; i++) {
+        tempItem = _j(itemCheckBoxDom[i]);
+        if (tempItem.hasClass('checked')) {
+           tempItem.click();
         }
       }
+        return;
+      }
+      dom.addClass('checked');
+      rootCheckBoxDom.addClass('is-checked');
+      for (let i = 0, len = itemCheckBoxDom.length; i < len; i++) {
+        tempItem = _j(itemCheckBoxDom[i]);
+        if (!tempItem.hasClass('checked')) {
+           tempItem.click();
+        }
+      }
+      
     },
     // hide or show sub menus
     hsCheckboxIcon(e) {
@@ -223,47 +196,63 @@ export default {
       iconDom.html('&#xe620;')
       iconDom.siblings('.sub-options').slideDown();
     },
-    optsItemsChange (e) {
-      let dom = _j(e.target).parents('label') || _j(e.target)
-      let checkDom = dom.children('.el-checkbox__input');
-      let subDom = dom.siblings('.sub-options');
-      let subCheckboxs = subDom.find('.el-checkbox');
-      if (checkDom.hasClass('is-checked')) {
-        // 选中
-        if (subCheckboxs.length > 0) {
-          let tempItem1 = '';
+    // level two checked or unchecked
+    itemSelect (e) {
+        let dom = _j(e.currentTarget);
+        console.log(e);
+        let itemCheckBoxDom = dom.children('.item-checkbox');
+        let subCheckboxs = dom.siblings('ul').find('.sub-el-checkbox');
+        if (itemCheckBoxDom.hasClass('is-checked')) {
+          dom.removeClass('checked');
+          itemCheckBoxDom.removeClass('is-checked');
+          let tempSubItem = '';
           for (let i = 0, len = subCheckboxs.length; i < len; i++) {
-            tempItem1 = _j(subCheckboxs[i]);
-           
-            if (!tempItem1.hasClass('is-checked')) {
-              tempItem1.click();
+            tempSubItem = _j(subCheckboxs[i]);
+            if (tempSubItem.hasClass('checked')) {
+              tempSubItem.removeClass('checked');
+              tempSubItem.children('.span-checkbox').removeClass('is-checked');
             }
-
           }
+          return;
         }
-       
-      } else {
-          // 取消选中
-             // let subCheckboxs = subDom.find('.el-checkbox');
-          if (subCheckboxs.length > 0) {
-              let tempItem2 = '';
-              for (let i = 0, len = subCheckboxs.length; i < len; i++) {
-                tempItem2 = _j(subCheckboxs[i]);
-                 var tempItemChil = tempItem2.children('.el-checkbox__input');
-                if (tempItemChil.hasClass('is-checked')) {
-                        tempItem2.click();
-                }
-
-              }
+       dom.addClass('checked');
+       itemCheckBoxDom.addClass('is-checked');
+       let tempSubItem = '';
+          for (let i = 0, len = subCheckboxs.length; i < len; i++) {
+            tempSubItem = _j(subCheckboxs[i]);
+            if (!tempSubItem.hasClass('checked')) {
+              tempSubItem.addClass('checked')
+              tempSubItem.children('.span-checkbox').addClass('is-checked')
             }
-        }
+          }
+        
+    },
+    subSelect(e){
+      let dom = _j(e.currentTarget);
+      let checkBoxDom = dom.children('.span-checkbox');
+      if (checkBoxDom.hasClass('is-checked')) {
+        dom.removeClass('checked');
+        checkBoxDom.removeClass('is-checked');
+        return;
       }
+      checkBoxDom.addClass('is-checked');
+      dom.addClass('checked');
+    }
   },
+  
   mounted() {
     bus.$on('is-show-rm-pup', (id) => {
       console.log('接收到事件了？');
       console.log(id);
       this.isShowDialog = true;
+      fetchRoles(this.$store, this.token).then(() => {
+        console.log('导航有数据吗？');
+        var tempData = this.$store.getters.getNavData.data.resultObj;
+        var tempRoles = tempData;
+        this.rolesData = tempRoles;
+        console.log(this.rolesData);
+            
+    })
     });
    
   }
@@ -335,5 +324,11 @@ export default {
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);
   -ms-transform: rotate(180deg);
+}
+.el-dialog--small{
+  width: 30%;
+}
+.el-form-item__content{
+  text-align: left;
 }
 </style>
