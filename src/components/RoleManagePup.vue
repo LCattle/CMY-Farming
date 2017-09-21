@@ -230,6 +230,7 @@ export default {
     subSelect(e){
       let dom = _j(e.currentTarget);
       let checkBoxDom = dom.children('.span-checkbox');
+      let otherThatDoms = dom.parent('li').siblings('li').children('.span-checkbox');
       if (checkBoxDom.hasClass('is-checked')) {
         dom.removeClass('checked');
         checkBoxDom.removeClass('is-checked');
@@ -237,22 +238,36 @@ export default {
       }
       checkBoxDom.addClass('is-checked');
       dom.addClass('checked');
+     let isAllChecked = this.otherCheckBoxIsChecked(otherThatDoms);
+     console.log(isAllChecked);
+      
+    },
+    otherCheckBoxIsChecked(doms) {
+       let tempOther = '';
+       let isAllChecked = false;
+       let i = 0;
+       let len = doms.length;
+       let isCheckedNum = 0;
+      for (i; i < len; i++) {
+        tempOther = otherThatDoms[i];
+        if (tempOther.hasClass('checked')) {
+         ++isCheckedNum;
+        }
+      }
+      if (isCheckedNum == len) {
+        console.log(isCheckedNum);
+        console.log('全部选中了');
+      }
+      //return isAllChecked;
     }
   },
   
   mounted() {
     bus.$on('is-show-rm-pup', (id) => {
-      console.log('接收到事件了？');
-      console.log(id);
       this.isShowDialog = true;
-      fetchRoles(this.$store, this.token).then(() => {
-        console.log('导航有数据吗？');
-        var tempData = this.$store.getters.getNavData.data.resultObj;
-        var tempRoles = tempData;
-        this.rolesData = tempRoles;
-        console.log(this.rolesData);
-            
-    })
+      var tempData = this.$store.getters.getNavData.data.resultObj;
+      var tempRoles = tempData;
+      this.rolesData = tempRoles;
     });
    
   }
@@ -315,8 +330,7 @@ export default {
   font-size: 12px;
   line-height: 15px;
   text-align: center;
-  background: green;
-  color: #fff;
+  color: #ccc;
 }
 
 .icon-rotate-to-top {

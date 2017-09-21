@@ -91,7 +91,7 @@ export default {
     height: 100vh;   
     min-height: 600px;
     overflow: auto;
-    background: url(../../static/images/login_bg.jpg) no-repeat 100% 100%;
+    background: url(./static/images/login_bg.jpg) no-repeat 100% 100%;
 }
 .logo-icon{
     font-size: 42px;

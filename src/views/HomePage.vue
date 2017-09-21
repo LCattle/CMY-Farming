@@ -46,11 +46,11 @@ export default {
     beforeMount() {
         console.log('---------------------');
         console.log(this.$store);
-        fetchHome(this.$store).then(() => {
+        /*fetchHome(this.$store).then(() => {
             console.log(this.$store);
             this.datas = this.$store.getters.homeData.resultData;
             console.log(this.datas.banner);
-        })
+        })*/
     },
     mounted() {
         var localStore = window.localStorage;
