@@ -12,7 +12,7 @@
     </el-form>
     <h1 class="form-title">角色列表</h1>
     <div class="btn-box">
-      <el-button type="text" @click="shwoDialog">
+      <el-button type="text" @click="shwoDialog('add', $event)">
         <i class="iconfont">&#xe763;</i>  
         <span>添加</span>
       </el-button>
@@ -26,7 +26,7 @@
       </el-table-column>
       <el-table-column label="操作" width="120">
         <template scope="scope">
-          <el-button type="text" size="small">
+          <el-button type="text" size="small" @click="shwoDialog('edit', $event)">
             <i class="iconfont">&#xe7c3;</i>
           </el-button>
         </template>
@@ -49,6 +49,7 @@
 import bus from './../eventBus'
 import store from './../store/index'
 import { mapGetters } from 'vuex'
+import _j from 'jquery'
 import RMPup from './../components/RoleManagePup'
 function fetchAllRoles(store, opts) {
   return store.dispatch('GET_ALL_ROLES', opts);
@@ -84,17 +85,11 @@ export default {
         hasNextPage: true,
         beginPage: 1
       },
-      tableData3: [
-      {
-        name: '系统管理员1',
-        roleStatus: '王小虎1',
-        roleEx: '上海市普陀区金沙江路 1518 弄'
-      }],
       multipleSelection: []
     }
   },
   created() {
-      
+     
   },
   computed: mapGetters({
     roleDatas: 'roleDatas'
@@ -119,6 +114,10 @@ export default {
     })
     },
     delRoles(){
+      if (!this.opts.roleIds) {
+        this._showMessage('error', '请选择要删除的角色！');
+        return;
+      }
       fetchDelRoles(this.$store, this.opts).then(() => {
         let delData = this.$store.getters.delRoles;
         if (delData.resultCode === '1') {
@@ -152,8 +151,15 @@ export default {
         this.decDatas(tempData);
       })
     },
-    shwoDialog: function () {
-     bus.$emit('is-show-rm-pup', '1');
+    shwoDialog: function (type, e) {
+      if (type === 'add') {
+        bus.$emit('is-show-rm-pup', 'add');
+      } else {
+        let dom = _j(e.currentTarget);
+        let id = dom.parents('td').next('td').find('.cell').text();
+        bus.$emit('is-show-rm-pup', 'edit', id);
+      }
+     
     },
     decDatas(data, opts) {
       let tempData = data;

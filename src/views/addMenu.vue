@@ -17,19 +17,19 @@
                     <div class="menu-box-root">
                         <i class="iconfont font-icon root-icon" @click="rootBoxClick($event)">&#xe76b;</i>
                         <span class="root-txt" @click="rootSelect($event)">{{ this.rootDom.name }}</span>
-                        <input type="hidden" v-bind:data-parentid="rootDom.id + '-' + rootDom.name" v-bind:data-info="rootDom.id + '-' + rootDom.name">
+                        <input type="hidden" v-bind:data-level="1" :data-icon="rootDom.menuicon" v-bind:data-parentid="rootDom.id + '-' + rootDom.name" v-bind:data-info="rootDom.id + '-' + rootDom.name">
                     </div>
                     <ul class="menu-items">
                         <li class="menu-item" v-for="(item, index) in menuDatas" :key="item.id">
                             <!-- <i class="iconfont font-icon menu-item-icon" v-if="item.isHasSub" @click="subItemsClick($event)">&#xe76b;</i> -->
                             <i class="iconfont font-icon menu-item-icon"  @click="subItemsClick($event)">&#xe76b;</i>
                             <span class="sub-txt" @click="showEditBox('item', $event)" >{{ item.name }}</span>
-                            <input type="hidden" v-bind:data-parentid="item.parentid + '-' + item.parentname" v-bind:data-info="item.id + '-' + item.name + '-' + item.menusort + '-' + item.url + '-' + item.menudesc">
+                            <input type="hidden" :data-icon="item.menuicon" v-bind:data-level="2" v-bind:data-parentid="item.parentid + '-' + item.parentname" v-bind:data-info="item.id + '-' + item.name + '-' + item.menusort + '-' + item.url + '-' + item.menudesc">
                             <ul class="sub-menu-box" v-if="item.isHasSub" v-bind:data-parent="item.id + '-' + item.name">
-                                <li class="sub-menu-item" v-for="(subItem, index) in item.subItems" :key="subItem.id"  v-bind:data-id="subItem.id" @click="showEditBox('subItem', $event)">
+                                <li class="sub-menu-item"  v-for="(subItem, index) in item.subItems" :key="subItem.id"  v-bind:data-id="subItem.id" @click="showEditBox('subItem', $event)">
                                     <i class="iconfont font-icon sub-menu-icon">&#xe781;</i>
                                     <span class="sub-item-txt">{{ subItem.name }}</span>
-                                    <input type="hidden" v-bind:data-parentid="subItem.parentid + '-' + subItem.parentname" v-bind:data-info="subItem.id + '-' + subItem.name + '-' + subItem.menusort + '-' + subItem.url + '-' + subItem.menudesc">
+                                    <input type="hidden" :data-icon="subItem.menuicon" v-bind:data-level="3" v-bind:data-parentid="subItem.parentid + '-' + subItem.parentname" v-bind:data-info="subItem.id + '-' + subItem.name + '-' + subItem.menusort + '-' + subItem.url + '-' + subItem.menudesc">
                                 </li>
                             </ul>
                         </li>
@@ -52,6 +52,9 @@
                     </el-form-item>
                     <el-form-item label="菜单排序">
                         <el-input v-model="ruleForm.sore"></el-input>
+                    </el-form-item>
+                    <el-form-item label="菜单图标"  v-show="isShowIcon">
+                        <el-input v-model="ruleForm.menuicon"></el-input>
                     </el-form-item>
                     <el-form-item label="菜单描述">
                         <el-input type="textarea" v-model="ruleForm.desc"></el-input>
@@ -101,9 +104,11 @@ export default {
                 menuStart: 1,
                 token:'',
                 id:'',
-                parentId: ''
+                parentId: '',
+                menuicon: ''
             },
             saveType: 'edit',
+            isShowIcon: true,
             menuDatas: {},
             rootDom: {},
             isShowEdit: false,
@@ -148,8 +153,10 @@ export default {
             }
             let idAndName = infoDom.attr('data-info'),
             parentInfo = infoDom.attr('data-parentid'),
+            numLevel = infoDom.attr('data-level'),
             tempArr = idAndName.split('-'),
             tempParentArr = parentInfo.split('-'),
+            icon = infoDom.attr('data-icon'),
             id = tempArr[0],  // 菜单ID
             name=tempArr[1],  // 菜单名字
             parentId = tempParentArr[0], // 父元素ID
@@ -157,10 +164,16 @@ export default {
             menuurl = tempArr[3],   // 菜单URL
             menudesc = tempArr[4],  // 菜单说明
             parentName = tempParentArr[1];  // 父元素名字
+            if (numLevel === '3' || numLevel === '1') {
+                this.isShowIcon = false;
+            } else {
+                this.isShowIcon = true;
+            }
             this.ruleForm.name = name;
             this.ruleForm.parentName = parentName;
             this.ruleForm.path = menuurl;
             this.ruleForm.sore = menusort;
+            this.ruleForm.menuicon = icon;
             this.ruleForm.parentId = parentId;
             this.ruleForm.id = id;
             this.ruleForm.desc = (!menudesc || menudesc == 'null') ? '' : menudesc;
@@ -187,18 +200,26 @@ export default {
            }
            let idAndName = infoDom.attr('data-info'),
             parentInfo = infoDom.attr('data-parentid'),
+            icon = infoDom.attr('data-icon'),
+            level = infoDom.attr('data-level'),
             tempArr = idAndName.split('-'),
             tempParentArr = parentInfo.split('-'),
             id = tempArr[0],  // 菜单ID
-            name=tempArr[1],  // 菜单名字
+            name = tempArr[1],  // 菜单名字
             parentId = tempParentArr[0], // 父元素ID
             menusort = tempArr[2],  // 菜单排序
             menuurl = tempArr[3],   // 菜单URL
             menudesc = tempArr[4],  // 菜单说明
-            parentName = tempParentArr[1];  // 父元素名字
-            this.ruleForm.name = '';
+            parentName = tempParentArr[1],  // 父元素名字
+            isHasSub = true;
             this.ruleForm.parentName = parentName;
             this.ruleForm.parentId = parentId;
+            if (level === '2') {
+                this.ruleForm.parentName = name;
+                this.ruleForm.parentId = id;
+            }
+            this.ruleForm.menuicon = icon;
+            this.ruleForm.name = '';
             this.ruleForm.path = '';
             this.ruleForm.sore = '';
             this.ruleForm.desc  = '';
@@ -208,8 +229,15 @@ export default {
             }
         },
         delMenu(e) {
-            if (this.ruleForm.parentId === '0' || !this.ruleForm.parentId) {
+            // 如果选中要删除的节点必须判断下面是否还有子节点
+            /*if (this.ruleForm.parentId === '0' || !this.ruleForm.parentId) {
                 this._showMessage('error', '此菜单不允删除！')
+                return;
+            }*/
+            let isHasSubItem = _j('.menu-active').siblings('ul');
+            console.log(isHasSubItem);
+            if (isHasSubItem.length > 0) {
+                this._showMessage('error', '该菜单下面还有子项！')
                 return;
             }
             this.ruleForm.token = this.token;

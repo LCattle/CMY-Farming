@@ -1,17 +1,17 @@
 <template>
     <el-menu default-active="2" class="el-menu-vertical-demo left-nav-reset-bg left-nav-items" @open="handleOpen" @close="handleClose">
         <div class="menu-box" v-for="(item, index) in navDatas" :key="item.id">
-            <el-menu-item :index="item.id" v-if="item.subItems.length < 1 && !item.isHasSub">
+            <el-menu-item :index="item.id" v-if="!item.subItems && !item.isHasSub">
                 <router-link :to="item.url">
-                    <i class="el-icon-menu"></i>{{item.name}}
+                    <i class="iconfont" v-html="item.menuicon"></i>{{item.name}}
                 </router-link>
             </el-menu-item>
             <div v-if="item.isHasSub">
                 <el-submenu :index="item.id" class="left-nav-reset-bg " :key="item.id">
                     <template slot="title">
-                        <i class="el-icon-message"></i>{{ item.name }}
+                        <i class="iconfont" v-html="item.menuicon"> </i>{{ item.name }}
                     </template>
-                    <div v-if="item.isHasSub&&item.subItems.length > 0">
+                    <div v-if="item.isHasSub && item.subItems">
                         <el-menu-item-group v-for="(subItem, idx) in item.subItems" :key="subItem.id">
                             <router-link :to="subItem.url">
                                 <el-menu-item :index="item.id + '-' + subItem.id">{{ subItem.name }}</el-menu-item>
@@ -61,13 +61,8 @@ export default {
     beforeMount() {
         let token = localStorage.token;
         fetchNav(this.$store, token).then(() => {
-            console.log('导航有数据吗？');
-            var tempData = this.$store.getters.getNavData.data.resultObj[0];
+        var tempData = this.$store.getters.getNavData.data.resultObj[0];
            this.navDatas = tempData.subItems;
-            console.log(tempData);
-            /*  if (tempData.isHasSub) {
-                 this.navDatas = tempData.subItems;
-             } */
         })
     },
     methods: {

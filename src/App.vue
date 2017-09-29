@@ -55,11 +55,11 @@ a:hover{
   color: #2c3e50;
 }
 @font-face {font-family: 'iconfont';
-    src: url('../static/fonts/iconfont.eot');
-    src: url('../static/fonts/iconfont.eot?#iefix') format('embedded-opentype'),
-    url('../static/fonts/iconfont.woff') format('woff'),
-    url('../static/fonts/iconfont.ttf') format('truetype'),
-    url('../static/fonts/iconfont.svg#iconfont') format('svg');
+    src: url('./assets/fonts/iconfont.eot');
+    src: url('./assets/fonts/iconfont.eot?#iefix') format('embedded-opentype'),
+    url('./assets/fonts/iconfont.woff') format('woff'),
+    url('./assets/fonts/iconfont.ttf') format('truetype'),
+    url('./assets/fonts/iconfont.svg#iconfont') format('svg');
 }
 .iconfont{
     font-family:"iconfont" !important;

@@ -37,6 +37,7 @@ export function fetchUpdateMenu(opts) {
         menusort: opts.sore,
         menudesc: opts.desc,
         menustart: 1,
+        menuicon: opts.menuicon,
         loginedtoken: opts.token
     }));
 }
@@ -48,6 +49,7 @@ export function fetchAddMenu(opts) {
         menusort: opts.sore,
         menudesc: opts.desc,
         menustart: 1,
+        menuicon: opts.menuicon,
         loginedtoken: opts.token
     }));
 }
@@ -110,8 +112,28 @@ export function fetchDelByIds(opts) {
 }
 
 export function fetchAddRole(opts) {
-    return Vue.axios.post('', qs.stringify({
+    return Vue.axios.post('http://10.1.2.151/ctower-mall-c/sys/rolemanagementInsertRow.do', qs.stringify({
         loginedtoken: opts.token,
-        deleteIds: opts.roleIds
+        rolename: opts.name,
+        rolestatus: opts.region,
+        roledesc: opts.desc,
+        menuIds: opts.roleIds
+    }));
+}
+
+export function fetchGetRoleById(opts) {
+    return Vue.axios.post('http://10.1.2.151/ctower-mall-c/sys/rolemanagementLookRow.do', qs.stringify({
+        loginedtoken: opts.token,
+        ids: opts.id
+    }));
+}
+export function fetchUpdateById(opts) {
+    return Vue.axios.post('http://10.1.2.151/ctower-mall-c/sys/rolemanagementUpdateRow.do', qs.stringify({
+        loginedtoken: opts.token,
+        ids: opts.id,
+        rolename: opts.name,
+        rolestatus: opts.region,
+        roledesc: opts.desc,
+        menuIds: opts.roleIds
     }));
 }
