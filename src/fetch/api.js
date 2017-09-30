@@ -5,15 +5,12 @@ export function fetchHomePage () {
 }
 
 export function fetchGetNav (token) {
-    console.log('有token吗？');
-    console.log(token);
     return Vue.axios.post('http://10.1.2.151/ctower-mall-c//sys/login/loadMenus.do', qs.stringify({
         'loginedtoken': token
     }))
 }
 
 export function fetchGetSubNavById (idx) {
-    console.log('获取子导航！');
     return Vue.axios.post('/api/test-post', {'id': idx.id})
 }
 
@@ -81,8 +78,6 @@ export function fetchUserById(opts) {
     }));
 }
 export function fetchUpateUserById(opts) {
-    console.log('参数是什么？');
-    console.log(opts);
     return Vue.axios.post('http://10.1.2.151/ctower-mall-c/sys/operatorUpdateRow.do', qs.stringify({
         loginedtoken: opts.token,
         opercode: opts.acc,

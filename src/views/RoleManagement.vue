@@ -96,7 +96,6 @@ export default {
   }),
   beforeMount() {
     fetchAllRoles(this.$store, this.opts).then(() => {
-      console.log('角色有数据吗？');
       let tempData = this.$store.getters.getAllRoles;
       this.decDatas(tempData);
     });
@@ -107,7 +106,7 @@ export default {
       let self = this;
       this.isShowLoading = true;
       window.setTimeout(function () {
-        fetchAllRoles(self.$store, this.opts.token).then(() => {
+        fetchAllRoles(self.$store, self.opts).then(() => {
         let tempData = self.$store.getters.getAllRoles;
         self.decDatas(tempData);
       }, 600)
